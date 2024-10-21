@@ -1,25 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import JsonFetcher from "./components/JsonFetcher";
+import JsonEditor from "./components/JsonEditor";
+import RenderJson from "./components/RenderJson";
+import "./App.css";
 
-function App() {
+const App = () => {
+  const [jsonData, setJsonData] = useState(null);
+  const [renderMode, setRenderMode] = useState("html");
+  const [status, setStatus] = useState("");
+
+  const handleJsonChange = (newJson) => {
+    setJsonData(newJson);
+  };
+
+  const handleModeChange = (mode) => {
+    setRenderMode(mode);
+  };
+
+  const handleStatusChange = (message) => {
+    setStatus(message);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app-container">
+      <h1>JSON Viewer</h1>
+      <div className="status">{status && <p>{status}</p>}</div>
+      <div className="main-section">
+        <JsonFetcher onJsonFetched={handleJsonChange} onStatusChange={handleStatusChange} />
+        <JsonEditor onJsonUpdate={handleJsonChange} onStatusChange={handleStatusChange} />
+        <RenderJson jsonData={jsonData} mode={renderMode} onModeChange={handleModeChange} />
+      </div>
     </div>
   );
-}
+};
 
 export default App;
